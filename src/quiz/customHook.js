@@ -7,7 +7,7 @@ export const useReduceString = (phrases, backgroundSpeed, typeSpeed) => {
 
   useEffect(() => {
     if (changeWord && number < phrases.length) {
-      if (text === phrases[number]) setChangeWord(!changeWord)
+      if (text === phrases[number]) setChangeWord(false)
       else {
         const Inteval = setInterval(() => {
           setText(phrases[number].slice(0, text.length + 1))
@@ -22,14 +22,19 @@ export const useReduceString = (phrases, backgroundSpeed, typeSpeed) => {
         )
         return () => clearInterval(Interval)
       } else {
-        setNumber(number + 1)
-        setChangeWord(!changeWord)
-      }
-      if (phrases.length === number) {
-        setNumber(0)
+        if (phrases.length >= number) setNumber(number + 1)
       }
     }
-  }, [text, changeWord, backgroundSpeed, typeSpeed, number, phrases])
+  }, [text, changeWord])
+
+  useEffect(() => {
+    console.log(number)
+    console.log(phrases[number])
+    if (phrases.length <= number) {
+      setNumber(0)
+    }
+    setChangeWord(true)
+  }, [number])
 
   return text
 }
