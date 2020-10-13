@@ -29,7 +29,7 @@ export const useReduceString = (phrases, backgroundSpeed, typeSpeed) => {
         setNumber(0)
       }
     }
-  }, [text, changeWord])
+  }, [text, changeWord, backgroundSpeed, typeSpeed, number, phrases])
 
   return text
 }
