@@ -1,9 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { useReduceString } from './customHook'
+import { useTypingWord } from './customHook'
 
 const AutoTypist = ({ phrases, typeSpeed, backspaceSpeed }) => {
-  const text = useReduceString(phrases, backspaceSpeed, typeSpeed)
+  const text = useTypingWord(phrases, backspaceSpeed, typeSpeed)
 
   if (phrases.length === 0) {
     return null

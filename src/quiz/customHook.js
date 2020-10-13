@@ -1,40 +1,33 @@
 import { useEffect, useState } from 'react'
 
-export const useReduceString = (phrases, backgroundSpeed, typeSpeed) => {
+export const useTypingWord = (phrases, backgroundSpeed, typeSpeed) => {
   const [number, setNumber] = useState(0)
   const [text, setText] = useState('')
-  const [changeWord, setChangeWord] = useState(true)
+  const [typing, setTyping] = useState(true)
 
-  useEffect(() => {
-    if (changeWord && number < phrases.length) {
-      if (text === phrases[number]) setChangeWord(false)
-      else {
-        const Inteval = setInterval(() => {
-          setText(phrases[number].slice(0, text.length + 1))
-        }, typeSpeed)
-        return () => clearInterval(Inteval)
+  useEffect( ()=>{
+    const interval = setInterval(()=>{
+      if (typing){
+        if (text === phrases[number]) {
+          setTyping(false);
+          return false;
+        }
+        if (number >= phrases.length){setNumber(0);return false}
+        setText(phrases[number].substring(0,text.length+1))
       }
-    } else {
-      if (text && text.length) {
-        const Interval = setInterval(
-          () => setText(text.slice(0, text.length - 1)),
-          backgroundSpeed,
-        )
-        return () => clearInterval(Interval)
-      } else {
-        if (phrases.length >= number) setNumber(number + 1)
+      else{
+        if (text.length === 0){
+          setTyping(true)
+          setNumber(number+1)
+          return false;
+        }
+        setText(phrases[number].substring(0,text.length-1))
       }
-    }
-  }, [text, changeWord])
+  }, typing ? typeSpeed : backgroundSpeed)
 
-  useEffect(() => {
-    console.log(number)
-    console.log(phrases[number])
-    if (phrases.length <= number) {
-      setNumber(0)
-    }
-    setChangeWord(true)
-  }, [number])
+  return ()=> clearInterval(interval)
+  } 
+  ,[text,typing,number,backgroundSpeed,typeSpeed,phrases])
 
   return text
 }
